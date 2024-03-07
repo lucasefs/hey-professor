@@ -47,3 +47,16 @@ it('should have at least 10 characters', function () {
     $request->assertSessionHasErrors(['question' => __('validation.min.string', ['min' => 10, 'attribute' => 'question'])]);
     assertDatabaseCount('questions', 0);
 });
+
+it('should create as a draft all the time', function () {
+
+    //Act :: agir
+    $request = post(route('question.store'), [
+        'question' => str_repeat('*', 260) . '?',
+    ]);
+
+    assertDatabaseHas('questions', [
+        'question' => str_repeat('*', 260) . '?',
+        'draft'    => true,
+    ]);
+});
