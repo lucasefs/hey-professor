@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use Closure;
-
-use function compact;
-
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\{RedirectResponse};
 use Illuminate\Support\Facades\Auth;
@@ -51,6 +48,15 @@ class QuestionController extends Controller
         $this->authorize('update', $question);
 
         return view('question.edit', compact('question'));
+    }
+
+    public function update(Question $question): RedirectResponse
+    {
+
+        $question->question = request()->question;
+        $question->save();
+
+        return back();
     }
 
     public function destroy(Question $question): RedirectResponse
