@@ -12,7 +12,7 @@ it('should be able to update a question', function () {
 
     put(route('question.update', $question), [
         'question' => 'Updated Question?',
-    ])->assertRedirect();
+    ])->assertRedirect(route('question.index'));
 
     $question->refresh();
 
@@ -29,7 +29,7 @@ it('should make sure that only question with status DRAFT can be updated', funct
     actingAs($user);
 
     put(route('question.update', $questionNotDraft))->assertForbidden();
-    put(route('question.update', $draftQuestion), ['question' => 'New Question'])->assertRedirect();
+    put(route('question.update', $draftQuestion), ['question' => 'New Question updated?'])->assertRedirect(route('question.index'));
 });
 
 it('should make sure that only the person who has created the question can update the question', function () {
@@ -41,7 +41,7 @@ it('should make sure that only the person who has created the question can updat
     put(route('question.update', $question))->assertForbidden();
 
     actingAs($rightUser);
-    put(route('question.update', $question), ['question' => 'New Question'])->assertRedirect();
+    put(route('question.update', $question), ['question' => 'New Question updated?'])->assertRedirect(route('question.index'));
 });
 
 it('should be able to update a new question bigger than 255 characters', function () {
