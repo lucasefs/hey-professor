@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 use Closure;
 use Illuminate\Http\{RedirectResponse};
+use Illuminate\Support\Facades\Auth;
 
 use function strlen;
 
@@ -13,7 +13,7 @@ class QuestionController extends Controller
     public function store(): RedirectResponse
     {
 
-        $attributes = request()->validate([
+        request()->validate([
             'question' => [
                 'required',
                 'min:10',
@@ -25,7 +25,7 @@ class QuestionController extends Controller
             ],
         ]);
 
-        Question::query()
+        Auth::user()->questions()
             ->create([
                 'question' => request()->question,
                 'draft'    => true,
