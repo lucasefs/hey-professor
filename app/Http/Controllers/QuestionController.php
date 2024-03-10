@@ -8,8 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\{RedirectResponse};
 use Illuminate\Support\Facades\Auth;
 
-use function to_route;
-
 class QuestionController extends Controller
 {
     public function store(): RedirectResponse
@@ -73,6 +71,17 @@ class QuestionController extends Controller
         $question->save();
 
         return to_route('question.index');
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+
+        $question = Question::withTrashed()->find($id);
+        $this->authorize('restore', $question);
+
+        $question->restore();
+
+        return back();
     }
 
     public function archive(Question $question): RedirectResponse
