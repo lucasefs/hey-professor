@@ -38,7 +38,8 @@ class QuestionController extends Controller
     {
 
         return view('question.index', [
-            'questions' => Auth::user()->questions,
+            'questions'         => Auth::user()->questions,
+            'archivedQuestions' => Auth::user()->questions()->onlyTrashed()->get(),
         ]);
     }
 
