@@ -8,8 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\{RedirectResponse};
 use Illuminate\Support\Facades\Auth;
 
-use function to_route;
-
 class QuestionController extends Controller
 {
     public function store(): RedirectResponse
@@ -40,7 +38,8 @@ class QuestionController extends Controller
     {
 
         return view('question.index', [
-            'questions' => Auth::user()->questions,
+            'questions'         => Auth::user()->questions,
+            'archivedQuestions' => Auth::user()->questions()->onlyTrashed()->get(),
         ]);
     }
 
@@ -75,11 +74,31 @@ class QuestionController extends Controller
         return to_route('question.index');
     }
 
+    public function restore(int $id): RedirectResponse
+    {
+
+        $question = Question::withTrashed()->find($id);
+        $this->authorize('restore', $question);
+
+        $question->restore();
+
+        return back();
+    }
+
+    public function archive(Question $question): RedirectResponse
+    {
+        $this->authorize('archive', $question);
+
+        $question->delete();
+
+        return back();
+    }
+
     public function destroy(Question $question): RedirectResponse
     {
         $this->authorize('destroy', $question);
 
-        $question->delete();
+        $question->forceDelete();
 
         return back();
     }

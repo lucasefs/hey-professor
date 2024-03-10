@@ -2,7 +2,8 @@
     'action',
     'post' => null,
     'put' => null,
-    'delete' => null
+    'delete' => null,
+    'patch' => null
 ])
 
 <form action="{{ $action }}" method="post" {{$attributes}}>
@@ -10,6 +11,10 @@
 
     @if($put)
         @method('PUT')
+    @endif
+
+    @if($patch)
+        @method('PATCH')
     @endif
 
     @if($delete)
